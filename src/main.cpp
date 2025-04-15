@@ -139,12 +139,12 @@ public:
     
 class Player{
     private:
-            sf::RectangleShape body;
-            Animation animation;
-            unsigned int row;
-            float speed;
-            bool faceRight;
+    Animation animation;
+    unsigned int row;
+    float speed;
+    bool faceRight;
     public:
+    sf::RectangleShape body;
     Player(sf::Texture *texture, sf::Vector2u imagecount, float switchtime, float Speed):
     animation(texture, imagecount, switchtime)
     {
@@ -153,7 +153,7 @@ class Player{
         faceRight = true;
         body.setSize({100,100});
         body.setOrigin(body.getSize()/ 2.0f);
-        sf::Texture playerTexture("Idle.png");
+        sf::Texture playerTexture("sprite.png");
         body.setPosition({400 , 300});
         body.setTexture(texture);
     }
@@ -172,7 +172,7 @@ class Player{
         if(movement.x ==0.0f){
             row = 0;}
         else{
-            row = 1;
+            row = 0;
             if(movement.x > 0){
                 faceRight = true;
             }
@@ -215,12 +215,12 @@ int main()
 {
     sf::RenderWindow window(sf::VideoMode({800,600}), "My Window", sf::Style::Close   | sf::Style::Resize);
     sf::View view({0.0f, 0.0f},{512.0f, 512.0f});
-    sf::Texture playerTexture("sprite.png");
+    sf::Texture playerTexture("Idle.png");
     //window.setFramerateLimit(24);
-    Player player(&playerTexture,{8, 4}, 0.12f, 100.0f);
+    Player player(&playerTexture,{10, 1}, 0.12f, 100.0f);
     //playerTexture.setRepeated(true);
     Platform platform1(nullptr, {100.0f, 100.0f},{50.0f,0.0f});
-    //Platform platform2(nullptr, {200.0f, 400.0f},{0.0f,300.0f});
+    Platform platform2(nullptr, {200.0f, 400.0f},{100.0f,100.0f});
 
     float deltaTime = 0.0f;
     sf::Clock clock;
@@ -239,9 +239,9 @@ int main()
         }
 
         player.update(deltaTime);
-        Collider* col = player.getCollider(); 
+        Collider col = player.getCollider(); 
 
-    platform1.getCollider().checkCollision(col, 0.5f);
+        platform1.getCollider().checkCollision(col, 0.5f);
         //platform2.getCollider().checkCollision(player.getCollider(), 1.0f);
         
         view.setCenter(player.getposition());
@@ -249,7 +249,7 @@ int main()
         window.clear(sf::Color::Blue);
         window.setView(view);
         platform1.draw(window);
-        //platform2.draw(window);
+        platform2.draw(window);
         player.draw(window);
         window.display();
     
